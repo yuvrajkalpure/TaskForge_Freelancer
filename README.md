@@ -61,6 +61,13 @@ The backend API server will start at `http://localhost:5000`.
    ```
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### 5. Inspecting the Database
+To view, search, and edit database records visually in a browser GUI:
+```bash
+npx prisma studio
+```
+This will launch Prisma Studio on [http://localhost:5555](http://localhost:5555).
+
 ---
 
 ## Running Integration Tests
