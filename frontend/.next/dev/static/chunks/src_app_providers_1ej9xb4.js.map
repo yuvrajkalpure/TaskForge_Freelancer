@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///D:/TaskForge/frontend/src/app/providers.js"],"sourcesContent":["'use client';\n\nimport React, { useState } from 'react';\nimport { QueryClient, QueryClientProvider } from '@tanstack/react-query';\n\nexport default function Providers({ children }) {\n  const [queryClient] = useState(\n    () =>\n      new QueryClient({\n        defaultOptions: {\n          queries: {\n            staleTime: 5000,\n            refetchOnWindowFocus: false,\n          },\n        },\n      })\n  );\n\n  return (\n    <QueryClientProvider client={queryClient}>\n      {children}\n    </QueryClientProvider>\n  );\n}\n"],"names":["Providers","children","queryClient","defaultOptions","queries","staleTime","refetchOnWindowFocus","client"],"mappings":";;;;;AAEA;AACA;AAAA;;;AAHA;;;AAKe,SAASA,UAAU,EAAEC,QAAQ,EAAE;;IAC5C,MAAM,CAACC,YAAY,GAAG,IAAA,yKAAQ;8BAC5B,IACE,IAAI,+LAAW,CAAC;gBACdC,gBAAgB;oBACdC,SAAS;wBACPC,WAAW;wBACXC,sBAAsB;oBACxB;gBACF;YACF;;IAGJ,qBACE,6LAAC,gNAAmB;QAACC,QAAQL;kBAC1BD;;;;;;AAGP;GAlBwBD;KAAAA"}}]
+}
