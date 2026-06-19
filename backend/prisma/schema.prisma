@@ -1,0 +1,112 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  client
+  freelancer
+  admin
+}
+
+enum ProjectStatus {
+  OPEN
+  ASSIGNED
+  DELIVERED
+  COMPLETED
+}
+
+model User {
+  id                 String         @id @default(uuid())
+  email              String         @unique
+  passwordHash       String
+  role               UserRole
+  fullName           String
+  isVerified         Boolean        @default(false)
+  isBanned           Boolean        @default(false)
+  verificationToken  String?
+  resetToken         String?
+  resetTokenExpires  DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  
+  // Relations
+  projects           Project[]      @relation("ClientProjects")
+  bids               Bid[]
+  deliveredWorks     Project[]      @relation("FreelancerProjects")
+  reviewsGiven       Review[]       @relation("Reviewer")
+  reviewsReceived    Review[]       @relation("Reviewee")
+  refreshTokens      RefreshToken[]
+}
+
+model Project {
+  id             String        @id @default(uuid())
+  title          String
+  description    String
+  budget         Float
+  status         ProjectStatus @default(OPEN)
+  clientId       String
+  client         User          @relation("ClientProjects", fields: [clientId], references: [id])
+  freelancerId   String?
+  freelancer     User?         @relation("FreelancerProjects", fields: [freelancerId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  bids           Bid[]
+  reviews        Review[]
+}
+
+model Bid {
+  id           String    @id @default(uuid())
+  amount       Float
+  proposal     String
+  projectId    String
+  project      Project   @relation(fields: [projectId], references: [id])
+  freelancerId String
+  freelancer   User      @relation(fields: [freelancerId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([projectId, freelancerId])
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  rating      Int      
+  comment     String
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  reviewerId  String
+  reviewer    User     @relation("Reviewer", fields: [reviewerId], references: [id])
+  revieweeId  String
+  reviewee    User     @relation("Reviewee", fields: [revieweeId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([projectId, reviewerId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PendingUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  fullName     String
+  otp          String
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+}
+
