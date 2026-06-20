@@ -431,15 +431,10 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Developer Setup & Admin Credentials Banner */}
+      {/* Admin Credentials Banner */}
       {!user && (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="admin-banner" style={{ background: '#eff6ff', borderBottom: '1px solid #bfdbfe', color: '#1e40af' }}>
-            ⚙️ <strong>First-Time Setup:</strong> Copy <code>backend/.env.example</code> to <code>.env</code>, configure environment variables, and run <code>npx prisma db push</code> inside the <code>backend/</code> folder.
-          </div>
-          <div className="admin-banner">
-            🔑 <strong>Test Admin Credentials:</strong> Email: <code>admin@taskforge.com</code> | Password: <code>adminpassword123</code>
-          </div>
+        <div className="admin-banner">
+          🔑 <strong>Test Admin Credentials:</strong> Email: <code>admin@taskforge.com</code> | Password: <code>adminpassword123</code>
         </div>
       )}
 
